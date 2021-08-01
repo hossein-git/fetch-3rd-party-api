@@ -3,7 +3,6 @@
 namespace Modules\API\Services;
 
 
-use Illuminate\Support\Facades\Log;
 use Modules\API\Facades\HttpFacade;
 
 class APIService

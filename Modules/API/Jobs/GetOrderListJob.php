@@ -18,7 +18,19 @@ class GetOrderListJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $tries = 10;
+//    public $tries = 10;
+
+    /**
+     * The number of seconds to wait before retrying the job.
+     *
+     * @var int
+     */
+    public $backoff = 4;
+
+    public function setDelay(int $delay): void
+    {
+        $this->delay = 4;
+    }
 
     /**
      * @var int

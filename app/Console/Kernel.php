@@ -43,6 +43,7 @@ class Kernel extends ConsoleKernel
             '--stop-when-empty',
             '--tries=5',
             '--sleep=5',
+            '--timeout=30',
         ]);
         return sprintf('queue:work %s', $params);
     }

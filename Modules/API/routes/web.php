@@ -17,7 +17,6 @@ use Modules\Order\Facades\OrderFacade;
 use Modules\Order\Facades\OrderItemFacade;
 use Modules\Order\Jobs\ChangeOrderStatusJob;
 use Modules\Order\Jobs\GetOrderDetailsJob;
-use Modules\Order\Jobs\HandleSaveOrderDetailsJob;
 use Modules\Order\Jobs\SaveOrderJob;
 use Modules\Order\SaveOrderHandler;
 use Modules\Product\Facades\ProductFacade;
@@ -25,6 +24,8 @@ use Modules\Product\Jobs\SaveProductJob;
 
 
 Route::get('/test5', function () {
+    GetOrderDetailsJob::dispatch(11);
+   dd('ds');
     //get latest page and latest id to start fetching
     GetLastOrdersPageJob::dispatch()->onConnection('sync');
     // get orders bigger than ID which are in last page
@@ -41,7 +42,9 @@ Route::get('/test5', function () {
 });
 
 Route::get('/test4', function () {
-
+    GetOrderDetailsJob::dispatch(11);
+//    \Illuminate\Support\Facades\Artisan::call('start-take-orders');
+//    APIFacade::getOrderList();
 });
 
 

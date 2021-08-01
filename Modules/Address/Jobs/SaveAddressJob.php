@@ -39,8 +39,4 @@ class SaveAddressJob implements ShouldQueue
             ShippingAddressFacade::create($shipping_address);
     }
 
-//    public function uniqueId()
-//    {
-//        return self::class.$this->order_id;
-//    }
 }
