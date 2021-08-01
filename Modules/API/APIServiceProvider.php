@@ -33,7 +33,7 @@ class APIServiceProvider extends ServiceProvider
             'api_config'
         );
         if (!$this->app->routesAreCached()) {
-//            $this->mapWebRoutes();
+            $this->mapWebRoutes();
         }
 
         $this->commands(

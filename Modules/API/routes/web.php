@@ -29,7 +29,6 @@ Route::get('/test5', function () {
     GetLastOrdersPageJob::dispatch()->onConnection('sync');
     // get orders bigger than ID which are in last page
     GetOrderListJob::dispatch()->delay(now()->addSeconds(5));
-    HandleSaveOrderDetailsJob::dispatch()->delay(now()->addSeconds(10));
 
 //    while ((int)$latestPage !== 1) {
 //
@@ -43,9 +42,6 @@ Route::get('/test5', function () {
 
 Route::get('/test4', function () {
 
-    SaveOrderHandler::saveOrders();
-    SaveOrderHandler::saveDetails();
-    SaveOrderHandler::changeStatus();
 });
 
 
