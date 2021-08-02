@@ -4,19 +4,20 @@ namespace Modules\API\Services;
 
 
 use Modules\API\Facades\HttpFacade;
+use Modules\Monitoring\Facades\MonitoringFacade;
 
 class APIService
 {
 
     public function getLastPage(?int $id = null)
     {
-        return  $this->getLastPageFromDb($id);
+        return $this->getLastPageFromDb($id);
     }
 
     private function getLastPageFromDb(?int $id = null)
     {
         $list = $this->getOrderList($id);
-        if (!isset($list['last_page']) ){
+        if (!isset($list['last_page'])) {
             throw new \Exception("Error to get list ");
         }
         return $list['last_page'];
@@ -29,8 +30,10 @@ class APIService
             'page' => $page,
         ];
         $response = HttpFacade::getRequest(config('api_config.get_orders_endpoint'), $params);
-        if (!$response->successful()){
-            throw new \Exception('Response Is not Successful ' . $response->status() . ' ' . $response->serverError());
+        if (!$response->successful()) {
+            $error = 'Response Is not Successful '.$response->status().' '.$response->serverError();
+            MonitoringFacade::log($error, 'error');
+            throw new \Exception($error);
         }
 
         return json_decode($response->body(), true);

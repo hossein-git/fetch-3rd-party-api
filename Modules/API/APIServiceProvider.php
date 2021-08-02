@@ -28,19 +28,16 @@ class APIServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        $this->mergeConfigFrom(
-            __DIR__.'/config/api_config.php',
-            'api_config'
-        );
-        if (!$this->app->routesAreCached()) {
-            $this->mapWebRoutes();
-        }
+        $this->mergeConfigFrom(__DIR__.'/config/api_config.php', 'api_config');
+//        if (!$this->app->routesAreCached()) {
+//            $this->mapWebRoutes();
+//        }
 
         $this->commands(
             [StartGetOrdersCommand::class]
         );
 
-        RateLimiter::for('fetch-order-list', function ($job) {
+        RateLimiter::for('fetch-order-list-middleware', function ($job) {
             return Limit::perMinute(30)->by($job);
         });
     }

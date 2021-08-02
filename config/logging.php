@@ -105,6 +105,7 @@ return [
             'driver' => 'single',
             'path' => storage_path('logs/jobs.log'),
             'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 1,
         ],
     ],
 

@@ -5,7 +5,9 @@ namespace Modules\Monitoring;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 use Modules\API\Facades\APIFacade;
+use Modules\Monitoring\Facades\MonitoringFacade;
 use Modules\Monitoring\Monitorers\MonitorApi;
+use Modules\Monitoring\Monitorers\MonitorByLog;
 use Modules\Monitoring\Monitorers\MonitorJobs;
 
 
@@ -14,6 +16,7 @@ class MonitoringServiceProvider extends ServiceProvider
 
     public function register()
     {
+        MonitoringFacade::shouldProxyTo(MonitorByLog::class);
         try {
             (new MonitorApi(new APIFacade()))->monitorApiService();
         } catch (\Exception $exception) {

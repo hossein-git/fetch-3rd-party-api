@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Modules\Company\Models\Company;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,5 +15,10 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
+        Company::query()->create(
+            [
+                'name' => 'Test Company',
+            ]
+        );
     }
 }

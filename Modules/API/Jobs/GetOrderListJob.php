@@ -3,6 +3,7 @@
 namespace Modules\API\Jobs;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -14,46 +15,35 @@ use Modules\API\Facades\CacheApiFacade;
  * this class will fire a request: APIFacade::getOrderList ,
  * to get order list and save it into cache
  */
-class GetOrderListJob implements ShouldQueue
+class GetOrderListJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-//    public $tries = 10;
+    public $tries = 1;
+    private $last_order_page;
 
-    /**
-     * The number of seconds to wait before retrying the job.
-     *
-     * @var int
-     */
-    public $backoff = 4;
-
-    public function setDelay(int $delay): void
+    public function __construct($last_order_page)
     {
-        $this->delay = 4;
+        $this->last_order_page = $last_order_page;
     }
 
-    /**
-     * @var int
-     */
-    private $id;
-    /**
-     * @var int
-     */
-    private $page;
-
-    public function __construct(int $id = null, int $page = null)
+    public function uniqueId()
     {
-        $this->id = $id;
-        $this->page = $page;
+        return $this->last_order_page;
     }
 
     public function handle()
     {
-        $latestId = $this->id ?? CacheApiFacade::getCachedLatestId();
-        $lastPage = $this->page ?? CacheApiFacade::getLastOrdersPage();
+        $latestId = CacheApiFacade::getCachedLatestId();
+        $lastPage = $this->last_order_page;
 
         //get the orders in last page
-        $orders = APIFacade::getOrderList($latestId, $lastPage);
+        try {
+            $orders = APIFacade::getOrderList($latestId, $lastPage);
+        } catch (\Exception $exception) {
+            $this->fail($exception->getMessage());
+            return;
+        }
 
         //put order list into cache
         CacheApiFacade::cacheOrderList($orders['data']);

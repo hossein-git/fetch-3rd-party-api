@@ -35,10 +35,10 @@ class GetLastOrdersPageJob implements ShouldQueue
         //get last id from local DB and save into cache if not exists
         $latestId = CacheApiFacade::getCachedLatestId() ?? $this->getLatestId();
 
-        if (!CacheApiFacade::getLastOrdersPage()) {
+//        if (!CacheApiFacade::hasLastOrderPage()) {
             $lastPage = APIFacade::getLastPage($latestId);
             CacheApiFacade::cacheLastOrdersPage($lastPage);
-        }
+//        }
     }
 
     private function getLatestId()

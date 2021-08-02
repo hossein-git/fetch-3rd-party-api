@@ -8,6 +8,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Modules\API\Facades\APIFacade;
+use Modules\API\Facades\CacheApiFacade;
 use Modules\Order\Facades\OrderFacade;
 use Modules\Order\Models\Order;
 
@@ -38,8 +39,11 @@ class ChangeOrderStatusJob implements ShouldQueue
         $orderId = $this->order_id;
         $params = ['type' => Order::APPROVED_STATUS];
 
-        APIFacade::changeOrderStatus($orderId, $params);
-        OrderFacade::update($orderId,$params);
+        if (CacheApiFacade::checkCachedDetails($this->order_id)){
+            APIFacade::changeOrderStatus($orderId, $params);
+            OrderFacade::update($orderId,$params);
+        }
+
     }
 
 }
