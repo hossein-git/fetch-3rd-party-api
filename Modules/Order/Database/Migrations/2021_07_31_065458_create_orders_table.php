@@ -30,7 +30,7 @@ class CreateOrdersTable extends Migration
             $table->foreignId('shipping_address_id')->nullable()
                 ->constrained('shipping_addresses')
                 ->nullOnDelete()->cascadeOnUpdate();
-            $table->unsignedInteger('total');
+            $table->unsignedFloat('total');
             $table->timestamps();
         });
     }

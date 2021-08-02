@@ -21,7 +21,7 @@ class CreateOrderItemsTable extends Migration
                 ->constrained('products')
                 ->cascadeOnUpdate()->nullOnDelete();
             $table->unsignedInteger('quantity');
-            $table->unsignedInteger('subtotal');
+            $table->unsignedFloat('subtotal');
             $table->timestamps();
         });
     }

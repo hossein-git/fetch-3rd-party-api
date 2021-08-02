@@ -19,7 +19,7 @@ class CreateProductsTable extends Migration
             $table->text('description')->nullable();
             $table->string('image')->nullable();
             $table->unsignedMediumInteger('sku');
-            $table->unsignedInteger('price');
+            $table->unsignedFloat('price');
             $table->timestamps();
         });
     }
