@@ -19,9 +19,7 @@ class OrderRepository extends BaseRepository
     /**
      * @var array
      */
-    protected $fieldSearchable = [
-        'name',
-    ];
+    protected $fieldSearchable = [];
 
     /**
      * Return searchable fields

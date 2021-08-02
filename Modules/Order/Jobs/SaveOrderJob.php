@@ -30,8 +30,4 @@ class SaveOrderJob implements ShouldQueue
         OrderFacade::saveOrder($this->order);
     }
 
-//    public function uniqueId()
-//    {
-//        return static::class . $this->order['id'];
-//    }
 }

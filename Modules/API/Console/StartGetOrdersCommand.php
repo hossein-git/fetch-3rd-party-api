@@ -19,6 +19,7 @@ class StartGetOrdersCommand extends Command
 
     public function handle()
     {
+        //TODO: add visual command processor
         $latestPage = $this->processLatestPage();
 
         $this->processGetOrderList($latestPage);
@@ -84,7 +85,6 @@ class StartGetOrdersCommand extends Command
         // get order list
         while (!CacheApiFacade::hasOrderListCached()) {
             GetOrderListJob::dispatch($latestPage);
-            dump('job runs');
             sleep(5);
         }
     }
