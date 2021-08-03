@@ -32,7 +32,6 @@ class APIService
         $response = HttpFacade::getRequest(config('api_config.get_orders_endpoint'), $params);
         if (!$response->successful()) {
             $error = 'Response Is not Successful '.$response->status().' '.$response->serverError();
-            MonitoringFacade::log($error, 'error');
             throw new \Exception($error);
         }
 

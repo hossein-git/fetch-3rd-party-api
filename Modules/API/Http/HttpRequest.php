@@ -20,12 +20,13 @@ class HttpRequest
             [
                 'Accept' => 'application/json',
             ]
-        );
+        )->timeout(config('api_config.http_timeout'));
     }
 
     /**
      * @param  string  $url
-     * @param  array  $params
+     * @param  array   $params
+     *
      * @return PromiseInterface|Response
      */
     public function getRequest(string $url = '', array $params = [])
@@ -36,7 +37,8 @@ class HttpRequest
 
     /**
      * @param  string  $url
-     * @param  array  $params
+     * @param  array   $params
+     *
      * @return PromiseInterface|Response
      */
     public function postRequest(string $url = '', array $params = [])

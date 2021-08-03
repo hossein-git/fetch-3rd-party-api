@@ -8,8 +8,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Modules\Address\Jobs\SaveAddressJob;
-use Modules\API\Facades\APIFacade;
 use Modules\API\Facades\CacheApiFacade;
+use Modules\API\Http\Controllers\SendApiController;
 use Modules\API\Jobs\RemoveApiCachesJob;
 use Modules\Customer\Jobs\SaveCustomerJob;
 
@@ -43,15 +43,17 @@ class GetOrderDetailsJob implements ShouldQueue
         $this->delay = 2;
     }
 
-//    public function middleware()
-//    {
-//        return [(new ThrottlesExceptions(10, 1))->backoff(5)];
-//    }
 
     public function handle()
     {
         $orderId = $this->order_id;
-        $details = APIFacade::getOrderDetails($orderId);
+        try {
+            $details = resolve(SendApiController::class)->getOrderDetails($orderId);
+        } catch (\Exception $exception) {
+            $this->release(now()->addMinutes(1));
+            $this->fail($exception->getMessage());
+            return;
+        }
         CacheApiFacade::cacheOrderDetails($details, $orderId);
     }
 

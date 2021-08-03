@@ -9,6 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Modules\API\Facades\APIFacade;
 use Modules\API\Facades\CacheApiFacade;
+use Modules\API\Http\Controllers\SendApiController;
 use Modules\Order\Facades\OrderFacade;
 use Modules\Order\Models\Order;
 
@@ -40,7 +41,12 @@ class ChangeOrderStatusJob implements ShouldQueue
         $params = ['type' => Order::APPROVED_STATUS];
 
         if (CacheApiFacade::checkCachedDetails($this->order_id)){
-            APIFacade::changeOrderStatus($orderId, $params);
+            try {
+                resolve(SendApiController::class)->changeOrderStatus($orderId, $params);
+            }catch (\Exception $exception){
+                $this->fail($exception->getMessage());
+                return;
+            }
             OrderFacade::update($orderId,$params);
         }
 

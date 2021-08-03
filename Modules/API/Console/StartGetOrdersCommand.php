@@ -5,6 +5,7 @@ namespace Modules\API\Console;
 use Illuminate\Console\Command;
 use Modules\API\Facades\APIFacade;
 use Modules\API\Facades\CacheApiFacade;
+use Modules\API\Http\Controllers\SendApiController;
 use Modules\API\Jobs\GetOrderListJob;
 use Modules\Order\Facades\OrderFacade;
 use Modules\Order\SaveOrderHandler;
@@ -64,7 +65,7 @@ class StartGetOrdersCommand extends Command
     private function getLatestPage()
     {
         $latestId = CacheApiFacade::getCachedLatestId() ?? $this->getLatestId();
-        return APIFacade::getLastPage($latestId);
+        return resolve(SendApiController::class)->getLastPage($latestId);
     }
 
     private function getLatestId()

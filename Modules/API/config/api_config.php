@@ -26,4 +26,19 @@ return [
      */
     'change_order_status_endpoint' => 'https://sample-market.despatchcloud.uk/api/orders/',
 
+    /**
+     * HTTP timeout
+     */
+    'http_timeout' => '5',
+
+    /**
+     * max request per minutes
+     */
+    'rate_limit' => '30',
+
+    /**
+     * sleep time in second after exceeded the rate limit time
+     */
+    'sleep_time' => '2',
+
 ];

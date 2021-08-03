@@ -8,8 +8,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Modules\API\Facades\APIFacade;
 use Modules\API\Facades\CacheApiFacade;
+use Modules\API\Http\Controllers\SendApiController;
 
 /**
  * this class will fire a request: APIFacade::getOrderList ,
@@ -39,7 +39,7 @@ class GetOrderListJob implements ShouldQueue, ShouldBeUnique
 
         //get the orders in last page
         try {
-            $orders = APIFacade::getOrderList($latestId, $lastPage);
+            $orders = resolve(SendApiController::class)->getOrderList($latestId, $lastPage);
         } catch (\Exception $exception) {
             $this->fail($exception->getMessage());
             return;
