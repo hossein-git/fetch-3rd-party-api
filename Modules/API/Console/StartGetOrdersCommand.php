@@ -21,7 +21,12 @@ class StartGetOrdersCommand extends Command
     public function handle()
     {
         //TODO: add visual command processor
-        $latestPage = $this->processLatestPage();
+        /**
+         * take last current page from API according last order_id in local DB
+         * and put the last_id into cache
+         * in case of fails , it tries every 5 second
+         */
+        $latestPage = $this->getLatestPage();
 
         $this->processGetOrderList($latestPage);
         /**
@@ -39,28 +44,6 @@ class StartGetOrdersCommand extends Command
         SaveOrderHandler::saveDetails();
     }
 
-    /**
-     * take last current page from API according last order_id in local DB
-     * and put the last_id into cache
-     * in case of fails , it tries every 5 second
-     */
-    private function processLatestPage()
-    {
-        $crashed = 0;
-        do {
-            try {
-                $latestPage = $this->getLatestPage();
-                break;
-            } catch (\Exception $exception) {
-                $crashed++;
-                if ($crashed === 6) {
-                    throw $exception;
-                }
-            }
-            sleep(5);
-        } while ($crashed <= 5);
-        return $latestPage;
-    }
 
     private function getLatestPage()
     {
