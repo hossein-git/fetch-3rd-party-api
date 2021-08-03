@@ -13,7 +13,7 @@
 ## About
 - to see process
 
-  - ./vendor/bin/sail artisan queue:work
+  - ./vendor/bin/sail artisan queue:list
   - ./vendor/bin/sail artisan start-take-orders
 
 
